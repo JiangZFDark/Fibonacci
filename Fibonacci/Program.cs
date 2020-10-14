@@ -82,6 +82,28 @@ namespace Fibonacci
             });
             #endregion
 
+            #region 十字链表
+            Console.WriteLine("十字链表:");
+            string[] str = new string[] { "v0", "v1", "v2", "v3" };
+            string[,] edges = new string[,]
+            {
+                {"v0","v3"},
+                {"v1","v0"},
+                {"v1","v2"},
+                {"v2","v0"},
+                {"v2","v1"}
+            };
+            var adj = Method.CreateOrthogonalList(str, edges);
+            string vertex1 = "v0";
+            string vertex2 = "v0";
+            string strInVertex;
+            string strOutVertex;
+            var countIn = Method.GetIndegree(adj, vertex1, out strInVertex);
+            var countOut = Method.GetOutdegree(adj, vertex2, out strOutVertex);
+            Console.WriteLine(vertex1 + "入度数量:" + countIn + ";对应节点:" + strInVertex);
+            Console.WriteLine(vertex2 + "出度数量:" + countOut + ";对应节点:" + strOutVertex);
+            #endregion
+
             Console.ReadKey();
         }
     }

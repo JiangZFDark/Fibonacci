@@ -83,5 +83,58 @@ namespace Fibonacci
             }
             return resultList;
         }
+
+        /// <summary>
+        /// 生成十字链表
+        /// </summary>
+        /// <param name="orthogonalArr"></param>
+        /// <param name="edges"></param>
+        /// <returns></returns>
+        public static OrthogonalList CreateOrthogonalList(string[] orthogonalArr, string[,] edges)
+        {
+            OrthogonalList adj = new OrthogonalList(orthogonalArr);
+            adj.addAdj(edges);
+            return adj;
+        }
+
+        /// <summary>
+        /// 获取出度
+        /// </summary>
+        /// <param name="adj"></param>
+        /// <param name="vertex"></param>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static int GetOutdegree(OrthogonalList adj, string vertex, out string str)
+        {
+            int i = 0;
+            str = string.Empty;
+            List<string> list;
+            i = adj.getOutdegree(vertex, out list);
+            if (list != null && list.Count > 0)
+            {
+                str = string.Join(",", list.ToArray());
+            }
+            return i;
+        }
+
+        /// <summary>
+        /// 获取入度
+        /// </summary>
+        /// <param name="adj"></param>
+        /// <param name="vertex"></param>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static int GetIndegree(OrthogonalList adj, string vertex, out string str)
+        {
+            int i = 0;
+            str = string.Empty;
+            List<string> list;
+            i = adj.getIndegree(vertex, out list);
+            if (list != null && list.Count > 0)
+            {
+                str = string.Join(",", list.ToArray());
+            }
+            return i;
+        }
     }
 }

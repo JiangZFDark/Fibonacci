@@ -80,6 +80,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="OrthogonalList.cs" />
     <Compile Include="Fibo.cs" />
     <Compile Include="Maybe.cs" />
     <Compile Include="Method.cs" />
