@@ -136,5 +136,36 @@ namespace Fibonacci
             }
             return i;
         }
+
+        /// <summary>
+        /// 广度优先遍历
+        /// </summary>
+        /// <param name="adj"></param>
+        /// <param name="vertex"></param>
+        /// <returns></returns>
+        public static string BFS(OrthogonalList adj, string vertex)
+        {
+            string message = string.Empty;
+            message = adj.BFS(vertex);
+            return message;
+        }
+
+        /// <summary>
+        /// 深度优先遍历
+        /// </summary>
+        /// <param name="adj"></param>
+        /// <param name="vertex"></param>
+        /// <returns></returns>
+        public static string DFS(OrthogonalList adj, string vertex)
+        {
+            string message = string.Empty;
+            message = adj.DFS(vertex);
+            return message;
+        }
+
+        public static void OverViewAndSetVisitedToFalse(OrthogonalList adj)
+        {
+            adj.OverViewAndSetVisitedToFalse();
+        }
     }
 }

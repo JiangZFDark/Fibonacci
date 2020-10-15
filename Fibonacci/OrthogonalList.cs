@@ -19,6 +19,7 @@ namespace Fibonacci
         private class VertexeType
         {
             public string vertexe { get; } = null;
+            public bool visisted { get; set; } = false;
             public AdjacencyType fristin { get; set; } = null;// 入边表（顶点为弧尾）
             public AdjacencyType fristout { get; set; } = null;// 出边表（顶点为弧头）
 
@@ -185,6 +186,94 @@ namespace Fibonacci
                 }
             }
             return i;
+        }
+
+        public void OverViewAndSetVisitedToFalse()
+        {
+            for(int i = 0; i < this.MAXVEX; i++)
+            {
+                this.verArr[i].visisted = false;
+            }
+        }
+
+        /// <summary>
+        /// 广度优先遍历
+        /// </summary>
+        /// <param name="vertex">起始节点</param>
+        /// <returns></returns>
+        public string BFS(string vertex)
+        {
+            StringBuilder message = new StringBuilder();
+            Queue<VertexeType> queue = new Queue<VertexeType>();
+            int pos = getPosition(vertex);
+            queue.Enqueue(this.verArr[pos]);
+            while (queue.Count>0)
+            {
+                VertexeType front = queue.Dequeue();
+                var frontPos = getPosition(front.vertexe);
+                if (front.visisted)
+                {
+                    continue;
+                }
+                message.Append(front.vertexe + ",");
+                this.verArr[frontPos].visisted = true;
+                AdjacencyType temp = this.verArr[frontPos].fristout;
+                if (temp == null)
+                    continue;
+                while (true)
+                {
+                    if (temp != null)
+                    {
+                        var vertexType = this.verArr[temp.headVex];
+                        queue.Enqueue(vertexType);
+                        temp = temp.adjLink;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+
+            }
+            
+            return message.ToString().TrimEnd(',');
+        }
+
+        /// <summary>
+        /// 深度优先遍历
+        /// </summary>
+        /// <param name="vertex">起始节点</param>
+        /// <returns></returns>
+        public string DFS(string vertex)
+        {
+            StringBuilder message = new StringBuilder();
+            int pos = getPosition(vertex);
+            var first = this.verArr[pos];
+            message.Append(first.vertexe + ",");
+            this.verArr[pos].visisted = true;
+            AdjacencyType temp = this.verArr[pos].fristout;
+            if (temp == null)
+            {
+                return message.ToString().TrimEnd(',');
+            }
+            while (true)
+            {
+                if (temp != null)
+                {
+                    var vertexType = this.verArr[temp.headVex];
+                    if (!vertexType.visisted)
+                    {
+                        var ret = DFS(vertexType.vertexe);
+                        message.Append(ret + ","); 
+                    }
+                    temp = temp.adjLink;
+                }
+                else
+                {
+                    break;
+                }
+            }
+            return message.ToString().TrimEnd(',');
         }
     }
 }

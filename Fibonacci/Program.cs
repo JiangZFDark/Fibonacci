@@ -102,6 +102,12 @@ namespace Fibonacci
             var countOut = Method.GetOutdegree(adj, vertex2, out strOutVertex);
             Console.WriteLine(vertex1 + "入度数量:" + countIn + ";对应节点:" + strInVertex);
             Console.WriteLine(vertex2 + "出度数量:" + countOut + ";对应节点:" + strOutVertex);
+            var bfs = Method.BFS(adj, "v2");
+            Console.WriteLine("广度遍历结果:"+bfs);
+            Console.WriteLine("清楚查询结果");
+            Method.OverViewAndSetVisitedToFalse(adj);
+            var dfs = Method.DFS(adj, "v2");
+            Console.WriteLine("深度遍历结果:" + dfs);
             #endregion
 
             Console.ReadKey();
