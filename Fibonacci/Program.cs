@@ -87,15 +87,16 @@ namespace Fibonacci
             string[] str = new string[] { "v0", "v1", "v2", "v3" };
             string[,] edges = new string[,]
             {
-                {"v0","v3"},
-                {"v1","v0"},
-                {"v1","v2"},
-                {"v2","v0"},
-                {"v2","v1"}
+                {"v0","v3","1"},
+                {"v1","v0","2"},
+                {"v1","v2","3"},
+                {"v2","v0","4"},
+                {"v2","v1","1"}
             };
             var adj = Method.CreateOrthogonalList(str, edges);
             string vertex1 = "v0";
             string vertex2 = "v0";
+            string vertex3 = "v2";
             string strInVertex;
             string strOutVertex;
             var countIn = Method.GetIndegree(adj, vertex1, out strInVertex);
@@ -104,10 +105,15 @@ namespace Fibonacci
             Console.WriteLine(vertex2 + "出度数量:" + countOut + ";对应节点:" + strOutVertex);
             var bfs = Method.BFS(adj, "v2");
             Console.WriteLine("广度遍历结果:"+bfs);
-            Console.WriteLine("清楚查询结果");
+            Console.WriteLine("清除查询结果");
             Method.OverViewAndSetVisitedToFalse(adj);
             var dfs = Method.DFS(adj, "v2");
             Console.WriteLine("深度遍历结果:" + dfs);
+            Console.WriteLine("清除查询结果");
+            Method.OverViewAndSetVisitedToFalse(adj);
+            var dijkstra = Method.Dijkstra(adj, vertex3);
+            Console.WriteLine("迪杰斯特拉结果:");
+            Console.WriteLine(dijkstra);
             #endregion
 
             Console.ReadKey();

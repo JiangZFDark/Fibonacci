@@ -36,6 +36,7 @@ namespace Fibonacci
         {
             public int verNum { get; set; } = -1;// 弧的起点在顶点数组中的下标
             public int headVex { get; set; } = -1;// 弧终点在顶点数组中的下标
+            public int weight { get; set; } = int.MaxValue;//距离权重
             public AdjacencyType headLink { get; set; } = null;// 指向下一个终点相同的邻接点(对应入度表)
             public AdjacencyType adjLink { get; set; } = null;// 指向下一个起点相同的邻接点(对应出度表)
         }
@@ -59,9 +60,11 @@ namespace Fibonacci
                 AdjacencyType tempin = null;
                 int posOne = getPosition(strArr[i,0]);     //获取弧头在顶点数组中的坐标
                 int posTwo = getPosition(strArr[i,1]);     //获取弧尾在顶点数组中的坐标
+                int weight = int.Parse(strArr[i, 2]);
                 AdjacencyType adj = new AdjacencyType();
                 adj.verNum = posOne;
                 adj.headVex = posTwo;
+                adj.weight = weight;
                 temp = this.verArr[posOne].fristout;        //弧头的出度表
                 tempin = this.verArr[posTwo].fristin;       //弧尾的入度表
                 //弧头出度表处理
@@ -275,5 +278,97 @@ namespace Fibonacci
             }
             return message.ToString().TrimEnd(',');
         }
+
+        /// <summary>
+        /// 迪杰斯特拉算法
+        /// </summary>
+        /// <param name="vertex"></param>
+        /// <returns></returns>
+        public Dictionary<string,int> Dijkstra(string vertex)
+        {
+            //创建距离表，存储从起点到每一个顶点的临时距离
+            Dictionary<string, int> distanceMap = new Dictionary<string, int>();
+            //起始点
+            int startIndex = getPosition(vertex);
+            //初始化距离表
+            for (int i = 0; i < this.MAXVEX; i++)
+            {
+                if (i != startIndex)
+                {
+                    distanceMap.Add(this.verArr[i].vertexe, int.MaxValue);
+                }
+            }
+            this.verArr[startIndex].visisted = true;
+            List<AdjacencyType> edges = GetEdgeList(this.verArr[startIndex]);
+            edges.ForEach(e =>
+            {
+                var index = e.headVex;
+                var tempVertex = this.verArr[index];
+                if (distanceMap.ContainsKey(tempVertex.vertexe))
+                {
+                    distanceMap[tempVertex.vertexe] = e.weight;
+                }
+            });
+            //主循环，重复遍历最短距离顶点和刷新距离表的操作
+            //除起始点外，每个顶点需要遍历一次
+            for(int i = 1; i < this.MAXVEX; i++)
+            {
+                int minDistanceFromStart = int.MaxValue;
+                int minDistanceIndex = -1;
+                //找到当前顶点距离最短顶点，为获得距离表的最小值
+                for(int j = 0; j < this.MAXVEX; j++)
+                {
+                    if (!this.verArr[j].visisted && distanceMap[this.verArr[j].vertexe] < minDistanceFromStart)
+                    {
+                        minDistanceFromStart = distanceMap[this.verArr[j].vertexe];
+                        minDistanceIndex = j;
+                    }
+                }
+                if (minDistanceIndex == -1)
+                {
+                    break;
+                }
+                this.verArr[minDistanceIndex].visisted = true;
+                var secondaryEdges = GetEdgeList(this.verArr[minDistanceIndex]);
+                secondaryEdges.ForEach(s =>
+                {
+                    var index = s.headVex;
+                    var tempVertex = this.verArr[index];
+                    if (!tempVertex.visisted)
+                    {
+                        int weight = s.weight;
+                        int preDistance = distanceMap[tempVertex.vertexe];
+                        if (weight != int.MaxValue && (minDistanceFromStart + weight < preDistance))
+                        {
+                            distanceMap[tempVertex.vertexe] = minDistanceFromStart + weight;
+                        }
+                    }
+                });
+            }
+            return distanceMap;
+        }
+
+        private List<AdjacencyType> GetEdgeList(VertexeType vertexe)
+        {
+            List<AdjacencyType> list = new List<AdjacencyType>();
+            var temp = vertexe.fristout;
+            if (temp != null)
+            {
+                while (true)
+                {
+                    if (temp != null)
+                    {
+                        list.Add(temp);
+                        temp = temp.adjLink;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            }
+            
+            return list;
+        } 
     }
 }

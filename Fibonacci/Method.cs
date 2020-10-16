@@ -167,5 +167,16 @@ namespace Fibonacci
         {
             adj.OverViewAndSetVisitedToFalse();
         }
+
+        public static string Dijkstra(OrthogonalList adj, string vertex)
+        {
+            StringBuilder message = new StringBuilder();
+            var distanceMap = adj.Dijkstra(vertex);
+            foreach(var head in distanceMap)
+            {
+                message.Append(vertex + "-" + head.Key + ":" + (head.Value == int.MaxValue ? "无法到达" : head.Value.ToString()) + "\r\n");
+            }
+            return message.ToString();
+        }
     }
 }
