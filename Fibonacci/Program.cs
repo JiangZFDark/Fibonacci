@@ -114,6 +114,9 @@ namespace Fibonacci
             var dijkstra = Method.Dijkstra(adj, vertex3);
             Console.WriteLine("迪杰斯特拉结果:");
             Console.WriteLine(dijkstra);
+            var floyd = Method.Floyd(adj);
+            Console.WriteLine("弗洛伊德结果:");
+            Console.WriteLine(floyd);
             #endregion
 
             Console.ReadKey();

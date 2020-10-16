@@ -310,7 +310,7 @@ namespace Fibonacci
                 }
             });
             //主循环，重复遍历最短距离顶点和刷新距离表的操作
-            //除起始点外，每个顶点需要遍历一次
+            //除起始点外，每个顶点需要遍历一次(外层循环N-1次)
             for(int i = 1; i < this.MAXVEX; i++)
             {
                 int minDistanceFromStart = int.MaxValue;
@@ -369,6 +369,91 @@ namespace Fibonacci
             }
             
             return list;
-        } 
+        }
+
+        /// <summary>
+        /// 弗洛伊德算法
+        /// </summary>
+        /// <returns></returns>
+        public List<VertexDistance> Floyd()
+        {
+            List<VertexDistance> distanceList = new List<VertexDistance>();
+            //初始化邻接矩阵
+            for(int i = 0; i < this.MAXVEX; i++)
+            {
+                distanceList.Add(new VertexDistance
+                {
+                    vertex = this.verArr[i].vertexe,
+                    headVex = this.verArr[i].vertexe,
+                    distance = 0
+                });
+                var temp = this.verArr[i].fristout;
+                if (temp == null)
+                {
+                    continue;
+                }
+                while (true)
+                {
+                    if (temp != null)
+                    {
+                        var vertexType = this.verArr[temp.headVex];
+                        distanceList.Add(new VertexDistance
+                        {
+                            vertex = this.verArr[i].vertexe,
+                            headVex = vertexType.vertexe,
+                            distance = temp.weight
+                        });
+                        temp = temp.adjLink;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            }
+            //Distance(i,j)=Min(Distance(i,j),(Distance(i,k)+Distance(k,j)))
+            for(int k = 0; k < this.MAXVEX; k++)
+            {
+                for(int i = 0; i < this.MAXVEX; i++)
+                {
+                    for(int j = 0; j < this.MAXVEX; j++)
+                    {
+                        var startVertex = this.verArr[i];
+                        var endVertex = this.verArr[j];
+                        var relayVertex = this.verArr[k];
+                        var edgeFromStartToRelay = distanceList.Find(x => x.vertex == startVertex.vertexe && x.headVex == relayVertex.vertexe);
+                        var edgeFromRealyToEnd = distanceList.Find(x => x.vertex == relayVertex.vertexe && x.headVex == endVertex.vertexe);
+                        var edgeFromStartToEnd = distanceList.Find(x => x.vertex == startVertex.vertexe && x.headVex == endVertex.vertexe);
+                        if (edgeFromStartToRelay == null || edgeFromStartToRelay.distance == int.MaxValue || edgeFromRealyToEnd == null || edgeFromRealyToEnd.distance == int.MaxValue)
+                        {
+                            continue;
+                        }
+                        VertexDistance vertexDistanceFromStartToEnd = new VertexDistance();
+                        vertexDistanceFromStartToEnd.vertex = startVertex.vertexe;
+                        vertexDistanceFromStartToEnd.headVex = endVertex.vertexe;
+                        vertexDistanceFromStartToEnd.distance = Math.Min(edgeFromStartToEnd == null ? int.MaxValue : edgeFromStartToEnd.distance, (edgeFromStartToRelay.distance + edgeFromRealyToEnd.distance));
+                        if (edgeFromStartToEnd != null)
+                        {
+                            edgeFromStartToEnd.distance = vertexDistanceFromStartToEnd.distance;
+                        }
+                        else
+                        {
+                            distanceList.Add(vertexDistanceFromStartToEnd);
+                        }
+                    }
+                }
+            }
+            distanceList.RemoveAll(d => d.headVex == d.vertex);
+            return distanceList;
+        }
+    }
+
+    public class VertexDistance
+    {
+        public string vertex { get; set; }
+
+        public string headVex { get; set; }
+
+        public int distance { get; set; } = int.MaxValue;
     }
 }

@@ -178,5 +178,16 @@ namespace Fibonacci
             }
             return message.ToString();
         }
+
+        public static string Floyd(OrthogonalList adj)
+        {
+            StringBuilder message = new StringBuilder();
+            var distanceList = adj.Floyd();
+            foreach(var head in distanceList)
+            {
+                message.Append(head.vertex + "-" + head.headVex + ":" + (head.distance == int.MaxValue ? "无法到达" : head.distance.ToString()) + "\r\n");
+            }
+            return message.ToString();
+        }
     }
 }
