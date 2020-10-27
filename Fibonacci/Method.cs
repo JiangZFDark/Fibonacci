@@ -171,11 +171,25 @@ namespace Fibonacci
         public static string Dijkstra(OrthogonalList adj, string vertex)
         {
             StringBuilder message = new StringBuilder();
-            var distanceMap = adj.Dijkstra(vertex);
+            var dijkstraEntity = adj.Dijkstra(vertex);
+            var distanceMap = dijkstraEntity.distanceMap;
             foreach(var head in distanceMap)
             {
                 message.Append(vertex + "-" + head.Key + ":" + (head.Value == int.MaxValue ? "无法到达" : head.Value.ToString()) + "\r\n");
+                message.Append("路径:" + PrintPreVex(dijkstraEntity.preVexMap, vertex, head.Key) + "\r\n");
             }
+            message = message.Remove(message.Length - 2, 2);
+            return message.ToString();
+        }
+
+        private static string PrintPreVex(Dictionary<string,string> preVexMap, string vertex, string target)
+        {
+            StringBuilder message = new StringBuilder();
+            if (!target.Equals(vertex))
+            {
+                message.Append(PrintPreVex(preVexMap, vertex, preVexMap[target]) + ",");
+            }
+            message.Append(vertex.Equals(target) ? target : target);
             return message.ToString();
         }
 
@@ -187,6 +201,7 @@ namespace Fibonacci
             {
                 message.Append(head.vertex + "-" + head.headVex + ":" + (head.distance == int.MaxValue ? "无法到达" : head.distance.ToString()) + "\r\n");
             }
+            message = message.Remove(message.Length - 2, 2);
             return message.ToString();
         }
     }

@@ -284,10 +284,12 @@ namespace Fibonacci
         /// </summary>
         /// <param name="vertex"></param>
         /// <returns></returns>
-        public Dictionary<string,int> Dijkstra(string vertex)
+        public DijkstraEntity Dijkstra(string vertex)
         {
+            DijkstraEntity ret = new DijkstraEntity();
             //创建距离表，存储从起点到每一个顶点的临时距离
             Dictionary<string, int> distanceMap = new Dictionary<string, int>();
+            Dictionary<string, string> preVexMap = new Dictionary<string, string>();
             //起始点
             int startIndex = getPosition(vertex);
             //初始化距离表
@@ -296,6 +298,7 @@ namespace Fibonacci
                 if (i != startIndex)
                 {
                     distanceMap.Add(this.verArr[i].vertexe, int.MaxValue);
+                    preVexMap.Add(this.verArr[i].vertexe, string.Empty);
                 }
             }
             this.verArr[startIndex].visisted = true;
@@ -307,6 +310,7 @@ namespace Fibonacci
                 if (distanceMap.ContainsKey(tempVertex.vertexe))
                 {
                     distanceMap[tempVertex.vertexe] = e.weight;
+                    preVexMap[tempVertex.vertexe] = vertex;
                 }
             });
             //主循环，重复遍历最短距离顶点和刷新距离表的操作
@@ -341,11 +345,14 @@ namespace Fibonacci
                         if (weight != int.MaxValue && (minDistanceFromStart + weight < preDistance))
                         {
                             distanceMap[tempVertex.vertexe] = minDistanceFromStart + weight;
+                            preVexMap[tempVertex.vertexe] = this.verArr[minDistanceIndex].vertexe;
                         }
                     }
                 });
             }
-            return distanceMap;
+            ret.distanceMap = distanceMap;
+            ret.preVexMap = preVexMap;
+            return ret;
         }
 
         private List<AdjacencyType> GetEdgeList(VertexeType vertexe)
@@ -455,5 +462,12 @@ namespace Fibonacci
         public string headVex { get; set; }
 
         public int distance { get; set; } = int.MaxValue;
+    }
+
+    public class DijkstraEntity
+    {
+        public Dictionary<string,int> distanceMap { get; set; }
+
+        public Dictionary<string,string> preVexMap { get; set; }
     }
 }
