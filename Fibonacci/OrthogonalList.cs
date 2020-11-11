@@ -453,6 +453,63 @@ namespace Fibonacci
             distanceList.RemoveAll(d => d.headVex == d.vertex);
             return distanceList;
         }
+
+        /// <summary>
+        /// 贪心算法
+        /// </summary>
+        /// <param name="vertex">父节点</param>
+        /// <returns></returns>
+        public Dictionary<string, string> Prim(string vertex)
+        {
+            Dictionary<string, string> reachedVertexs = new Dictionary<string, string>();
+            reachedVertexs.Add(vertex, "null");
+            //边的权重
+            int weight = 0;
+            //源顶点下标
+            int fromIndex = getPosition(vertex);
+            //目标顶点下标
+            int toIndex = fromIndex;
+            this.verArr[fromIndex].visisted = true;
+            while (reachedVertexs.Count < this.verArr.Length)
+            {
+                weight = int.MaxValue;
+                //在已触达的顶点中，寻找到达新顶点的最短边
+                foreach (var reachedVertex in reachedVertexs.Keys)
+                {
+                    var vertexe = this.verArr[getPosition(reachedVertex)];
+                    var firstout = vertexe.fristout;
+                    if (firstout == null)
+                    {
+                        continue;
+                    }
+                    while (true)
+                    {
+                        if (firstout != null)
+                        {
+                            var vertexType = this.verArr[firstout.headVex];
+                            if (!vertexType.visisted)
+                            {
+                                if (firstout.weight < weight)
+                                {
+                                    weight = firstout.weight;
+                                    fromIndex = firstout.verNum;
+                                    toIndex = firstout.headVex;
+                                }
+                            }
+                            firstout = firstout.adjLink;
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                }
+                this.verArr[toIndex].visisted = true;
+                reachedVertexs.Add(this.verArr[toIndex].vertexe, this.verArr[fromIndex].vertexe);
+            }
+
+            return reachedVertexs;
+        }
     }
 
     public class VertexDistance

@@ -204,5 +204,17 @@ namespace Fibonacci
             message = message.Remove(message.Length - 2, 2);
             return message.ToString();
         }
+
+        public static string Prim(OrthogonalList adj, string vertex)
+        {
+            StringBuilder message = new StringBuilder();
+            var minGenTree = adj.Prim(vertex);
+            foreach(var key in minGenTree.Keys)
+            {
+                message.Append("顶点:" + key + "-父节点:" + minGenTree[key] + "\r\n");
+            }
+            message = message.Remove(message.Length - 2, 2);
+            return message.ToString();
+        }
     }
 }

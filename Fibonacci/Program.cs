@@ -107,16 +107,25 @@ namespace Fibonacci
             Console.WriteLine("广度遍历结果:"+bfs);
             Console.WriteLine("清除查询结果");
             Method.OverViewAndSetVisitedToFalse(adj);
+
             var dfs = Method.DFS(adj, "v2");
             Console.WriteLine("深度遍历结果:" + dfs);
             Console.WriteLine("清除查询结果");
             Method.OverViewAndSetVisitedToFalse(adj);
+
             var dijkstra = Method.Dijkstra(adj, vertex3);
             Console.WriteLine("迪杰斯特拉结果:");
             Console.WriteLine(dijkstra);
+
             var floyd = Method.Floyd(adj);
             Console.WriteLine("弗洛伊德结果:");
             Console.WriteLine(floyd);
+
+            Console.WriteLine("清除查询结果");
+            Method.OverViewAndSetVisitedToFalse(adj);
+            var prim = Method.Prim(adj, "v2");
+            Console.WriteLine("Prim贪心算法结果:");
+            Console.WriteLine(prim);
             #endregion
 
             Console.ReadKey();
