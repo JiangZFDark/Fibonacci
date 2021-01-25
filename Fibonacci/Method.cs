@@ -57,7 +57,7 @@ namespace Fibonacci
         public static List<List<int>> ThreeSum(int[] nums, int target)
         {
             List<List<int>> resultList = new List<List<int>>();
-            Array.Sort(nums);
+            Array.Sort(nums);//从小到大排序
             for(int i = 0; i < nums.Length; i++)
             {
                 int d = target - nums[i];
